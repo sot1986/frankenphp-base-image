@@ -11,15 +11,21 @@ phases:
   pre_build:
     on-failure: ABORT
     commands:
-      - echo "Pre build"
+      - echo "Loggind in to ECR..."
+      - aws ecr get-login-password --region eu-south-1 | docker login --username AWS --password-stdin $REPOSITORY
     
   build:
     on-failure: ABORT
     commands:
       - echo "Building"
+      - docker build -t $IMAGE .
+      - echo "Tagging"
+      - docker tag $IMAGE:$IMAGE_TAG $REPOSITORY/$IMAGE:$IMAGE_TAG
     
   post_build:
     on-failure: ABORT
     commands:
-      - echo "Post build"
-    
+      - echo "Loggin images"
+      - docker images ls -a
+      - echo "Pushing to ECR"
+      - docker push $REPOSITORY/$IMAGE:$IMAGE_TAG

@@ -9,12 +9,12 @@ build:
 
 auth:
 	@echo "Authenticating with AWS ECR..."
-	aws ecr get-login-password --region eu-south-1 | docker login --username AWS --password-stdin 208722357485.dkr.ecr.eu-south-1.amazonaws.com
+	aws ecr get-login-password --region eu-south-1 | docker login --username AWS --password-stdin ${REPOSITORY}
 
 build-push:
 	@echo "Building..."
-	docker build -t prod-laravel-frankenphp-base-image .
+	docker build -t ${IMAGE} .
 	@echo "Tagging..."
-	docker tag prod-laravel-frankenphp-base-image:latest 208722357485.dkr.ecr.eu-south-1.amazonaws.com/prod-laravel-frankenphp-base-image:latest
+	docker tag ${IMAGE}:${latest} ${REPOSITORY}/${IMAGE}:${latest}
 	@echo "Pushing..."
 	docker push 208722357485.dkr.ecr.eu-south-1.amazonaws.com/prod-laravel-frankenphp-base-image:latest
