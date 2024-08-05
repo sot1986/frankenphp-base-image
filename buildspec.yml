@@ -25,7 +25,7 @@ phases:
   post_build:
     on-failure: ABORT
     commands:
-      - echo "Loggin images"
+      - echo "Logging images"
       - docker images ls -a
       - echo "Pushing to ECR"
       - docker push $REPOSITORY/$IMAGE:$IMAGE_TAG
